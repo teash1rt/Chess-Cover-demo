@@ -1,9 +1,9 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import ChessCover from './components/ChessCover.vue'
 </script>
 
 <template>
-  <HelloWorld/>
+  <ChessCover/>
 </template>
 
 <style scoped>
