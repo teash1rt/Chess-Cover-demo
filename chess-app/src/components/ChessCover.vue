@@ -2,9 +2,9 @@
   <div class="box">
     <div>
       <h2>棋盘覆盖问题</h2>
-      <el-input class="input" v-model="input" placeholder="请输入一个不超过5的正整数以表示问题中的指数值" @blur="post" />
+      <el-input class="input" v-model="input" placeholder="请输入一个不超过5的正整数以表示问题中的长度指数值" @blur="post" />
       <div class="button">
-        <el-button type="primary" @click="random" v-show="iscul">random</el-button>
+        <el-button type="primary" @click="random" v-show="iscul">随机格子</el-button>
         <el-button type="warning" disabled v-show="!iscul">请重置</el-button>
         <el-button type="primary" @click="confirm" v-show="iscul">开始铺!</el-button>
         <el-button type="danger" @click="reset" v-show="!iscul">重置</el-button>
@@ -18,7 +18,8 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref } from "vue"
+
 const input = ref('')
 const data = ref(0)
 const iscul = ref(true)
@@ -29,8 +30,8 @@ const post = () => {
       let dom = document.getElementById(last)
       dom.style.backgroundColor = 'white'
     }
-  }else{
-    alert('k值应为一个不超过5的正整数')
+  } else {
+    alert('应输入一个不超过5的正整数')
   }
 }
 let xlen = null
@@ -50,46 +51,45 @@ const col = {
   9: 'olive'
 }
 const solve = () => {
-  let a, b;
-  a = xlen;
-  b = ylen;
-  chessBoard(1, 1, a, b, data.value);
+  let a, b
+  a = xlen
+  b = ylen
+  chessBoard(1, 1, a, b, data.value)
 }
 const chessBoard = (x, y, a, b, len) => {
   if (len == 1) {
-    return;
+    return
   }
-  let h = len / 2;
-  let t = ++num;
-
+  let h = len / 2
+  let t = ++num
   if (a < x + h && b < y + h) {
-    chessBoard(x, y, a, b, h);
+    chessBoard(x, y, a, b, h)
   } else {
-    matrix.value[x + h - 1][y + h - 1] = t;
-    chessBoard(x, y, x + h - 1, y + h - 1, h);
+    matrix.value[x + h - 1][y + h - 1] = t
+    chessBoard(x, y, x + h - 1, y + h - 1, h)
   }
   if (a < x + h && b >= y + h) {
-    chessBoard(x, y + h, a, b, h);
+    chessBoard(x, y + h, a, b, h)
   } else {
-    matrix.value[x + h - 1][y + h] = t;
-    chessBoard(x, y + h, x + h - 1, y + h, h);
+    matrix.value[x + h - 1][y + h] = t
+    chessBoard(x, y + h, x + h - 1, y + h, h)
   }
   if (a >= x + h && b >= y + h) {
-    chessBoard(x + h, y + h, a, b, h);
+    chessBoard(x + h, y + h, a, b, h)
   } else {
-    matrix.value[x + h][y + h] = t;
-    chessBoard(x + h, y + h, x + h, y + h, h);
+    matrix.value[x + h][y + h] = t
+    chessBoard(x + h, y + h, x + h, y + h, h)
   }
   if (a >= x + h && b < y + h) {
-    chessBoard(x + h, y, a, b, h);
+    chessBoard(x + h, y, a, b, h)
   } else {
-    matrix.value[x + h][y + h - 1] = t;
-    chessBoard(x + h, y, x + h, y + h - 1, h);
+    matrix.value[x + h][y + h - 1] = t
+    chessBoard(x + h, y, x + h, y + h - 1, h)
   }
 }
 
 const random = () => {
-  let dom;
+  let dom
   if (last) {
     let dom = document.getElementById(last)
     if (dom) {
@@ -131,7 +131,7 @@ const random = () => {
       ylen = order
     }
   }
-};
+}
 
 async function colored() {
   for (let tmp = 1; tmp <= num; tmp++) {
@@ -139,20 +139,20 @@ async function colored() {
       setTimeout(() => {
         for (let i = 1; i <= data.value; i++) {
           for (let j = 1; j <= data.value; j++) {
-            let p = tmp % 10;
+            let p = tmp % 10
             if (matrix.value[i][j] === tmp) {
-              let dom = document.getElementById(data.value * (i - 1) + j);
-              dom.style.backgroundColor = col[p];
+              let dom = document.getElementById(data.value * (i - 1) + j)
+              dom.style.backgroundColor = col[p]
             }
           }
         }
-        resolve("good");
-      }, 180);
-    });
+        resolve("good")
+      }, 180)
+    })
   }
 }
 const check = () => {
-  if(parseInt(input.value)!=parseFloat(input.value)||parseInt(input.value)>5||parseInt(input.value)<0){
+  if (parseInt(input.value) != parseFloat(input.value) || parseInt(input.value) > 5 || parseInt(input.value) < 0) {
     return false
   }
   return true
@@ -166,8 +166,8 @@ const confirm = () => {
     iscul.value = !iscul.value
     solve()
     colored()
-  }else{
-    alert('k值应为一个不超过5的正整数')
+  } else {
+    alert('应输入一个不超过5的正整数')
   }
 }
 </script> 
