@@ -2,27 +2,40 @@
   <div class="box">
     <div>
       <h2>棋盘覆盖问题</h2>
-      <el-input class="input" v-model="input" placeholder="请输入一个不超过5的正整数以表示问题中的长度指数值" @blur="post" />
+      <el-input
+        class="input"
+        v-model="input"
+        placeholder="请输入一个不超过5的正整数以表示问题中的长度指数值"
+        @blur="post"
+      />
       <div class="button">
-        <el-button type="primary" @click="random" v-show="iscul">随机格子</el-button>
-        <el-button type="warning" disabled v-show="!iscul">请重置</el-button>
-        <el-button type="primary" @click="confirm" v-show="iscul">开始铺!</el-button>
-        <el-button type="danger" @click="reset" v-show="!iscul">重置</el-button>
+        <el-button type="primary" @click="random" v-show="isCalculating"
+          >随机格子</el-button
+        >
+        <el-button type="warning" disabled v-show="!isCalculating"
+          >请重置</el-button
+        >
+        <el-button type="primary" @click="confirm" v-show="isCalculating"
+          >开始铺!</el-button
+        >
+        <el-button type="danger" @click="reset" v-show="!isCalculating"
+          >重置</el-button
+        >
       </div>
     </div>
     <div v-for="x in parseInt(data)" class="row">
-      <span v-for="y in parseInt(data)" :id="parseInt(data)*(x-1)+y">
+      <span v-for="y in parseInt(data)" :id="parseInt(data) * (x - 1) + y">
       </span>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref } from 'vue'
 
 const input = ref('')
 const data = ref(0)
-const iscul = ref(true)
+const isCalculating = ref(true)
 const post = () => {
   if (check()) {
     data.value = Math.pow(2, parseInt(input.value))
@@ -34,28 +47,35 @@ const post = () => {
     alert('应输入一个不超过5的正整数')
   }
 }
-let xlen = null
-let ylen = null
+
+let xLen = null
+let yLen = null
 let matrix = ref(new Array(100).fill(0).map((item) => new Array(100).fill(0)))
-let num = 0, last = null
+let num = 0
+let last = null
 const col = {
-  0: "red",
-  1: "greenyellow",
-  2: "blue",
-  3: "darkviolet",
-  4: "pink",
-  5: "grey",
-  6: "aqua",
-  7: "gold",
+  0: 'red',
+  1: 'greenyellow',
+  2: 'blue',
+  3: 'darkviolet',
+  4: 'pink',
+  5: 'grey',
+  6: 'aqua',
+  7: 'gold',
   8: 'darkcyan',
-  9: 'olive'
+  9: 'olive',
+  10: 'darkorange',
+  11: 'cyan',
+  12: 'darkkhaki',
 }
+
 const solve = () => {
   let a, b
-  a = xlen
-  b = ylen
+  a = xLen
+  b = yLen
   chessBoard(1, 1, a, b, data.value)
 }
+
 const chessBoard = (x, y, a, b, len) => {
   if (len == 1) {
     return
@@ -103,56 +123,61 @@ const random = () => {
     if (dom) {
       dom.style.backgroundColor = 'black'
       last = data.value * (order - 1) + 1
-      xlen = order
-      ylen = 1
+      xLen = order
+      yLen = 1
     }
   } else if (seed < 0.5) {
     dom = document.getElementById(order)
     if (dom) {
       dom.style.backgroundColor = 'black'
       last = order
-      xlen = 1
-      ylen = order
+      xLen = 1
+      yLen = order
     }
   } else if (seed < 0.75) {
     dom = document.getElementById(data.value * (order - 1) + data.value)
     if (dom) {
       dom.style.backgroundColor = 'black'
       last = data.value * (order - 1) + data.value
-      xlen = order
-      ylen = data.value
+      xLen = order
+      yLen = data.value
     }
   } else {
     dom = document.getElementById(data.value * (data.value - 1) + order)
     if (dom) {
       dom.style.backgroundColor = 'black'
       last = data.value * (data.value - 1) + order
-      xlen = data.value
-      ylen = order
+      xLen = data.value
+      yLen = order
     }
   }
 }
 
-async function colored() {
+const colored = async () => {
   for (let tmp = 1; tmp <= num; tmp++) {
-    await new Promise((resolve, reject) => {
+    await new Promise((resolve) => {
       setTimeout(() => {
         for (let i = 1; i <= data.value; i++) {
           for (let j = 1; j <= data.value; j++) {
-            let p = tmp % 10
+            let p = tmp % 13
             if (matrix.value[i][j] === tmp) {
               let dom = document.getElementById(data.value * (i - 1) + j)
               dom.style.backgroundColor = col[p]
             }
           }
         }
-        resolve("good")
+        resolve()
       }, 180)
     })
   }
 }
+
 const check = () => {
-  if (parseInt(input.value) != parseFloat(input.value) || parseInt(input.value) > 5 || parseInt(input.value) < 0) {
+  if (
+    parseInt(input.value) != parseFloat(input.value) ||
+    parseInt(input.value) > 5 ||
+    parseInt(input.value) < 0
+  ) {
     return false
   }
   return true
@@ -161,16 +186,17 @@ const check = () => {
 const reset = () => {
   location.reload()
 }
+
 const confirm = () => {
   if (check()) {
-    iscul.value = !iscul.value
+    isCalculating.value = !isCalculating.value
     solve()
     colored()
   } else {
     alert('应输入一个不超过5的正整数')
   }
 }
-</script> 
+</script>
 
 <style scoped>
 .box {
@@ -202,6 +228,6 @@ span:hover {
 
 .input {
   width: 30%;
-  margin: 2px
+  margin: 2px;
 }
 </style>
