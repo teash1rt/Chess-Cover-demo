@@ -1,8 +1,11 @@
 # Chess-Cover-demo
-棋盘覆盖问题可视化
 
+棋盘覆盖问题算法可视化
 
+## 项目构建
 
-##### 项目地址
+vue3 + vite + element-plus
 
-[ChessCover](http://152.136.154.181:9010/)
+## 运行截图
+
+![](result.gif)
